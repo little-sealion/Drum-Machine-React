@@ -31,9 +31,10 @@ function KeyBoard(){
 
 
   return (
-    <div className = "w-120 h-96 border-4 m-6 p-2">
-      <h1 className="font-serif text-center text-4xl m-4">Tess's Keyboard</h1>
-      <div className="flex ">
+    <div className = "w-120 h-96 border-4 m-2 p-2">
+      <h1 className="font-serif text-center text-2xl m-4 ">Tess's Keyboard</h1>
+      <p className="font-serif text-center text-purple-500">Please turn on power to play</p>
+      <div className="flex">
 
         <KeyPad power={power} volume={volume} bank={bank} onDisplay={onDisplay} />
         <ControlPanel
@@ -50,7 +51,7 @@ function KeyBoard(){
 
 function ControlPanel(props){
   return(
-    <div id="control-panel" className="inline-block w-1/3 m-4">
+    <div id="control-panel" className="inline-block w-1/4 mt-2">
       <Power power={props.power} onPower={props.onPower}  />
       <Display power={props.power} display={props.display} />
       <Volume power={props.power} volume={props.volume} onVolume={props.onVolume} />
@@ -72,13 +73,13 @@ function Power(props) {
 }
 function Display(props){
  return(
-   <div id="display" className="w-4/5 h-1/4 bg-purple-400 text-center pt-4 mb-4 rounded-sm">{props.display}</div>
+   <div id="display" className="w-full h-1/4 overflow-auto max-w-prose bg-purple-400 text-center  p-2 mb-2 rounded-sm">{props.display}</div>
  )
 }
 function Volume(props){
  return(
   <div>
-  <input type="range" id="volume" name="volume"
+  <input type="range" id="volume" name="volume" className="w-full"
          min="0" max="100" disabled={!props.power} value={props.volume} onChange={(e) => props.onVolume(e.target.value)} />
   <label htmlFor="volume">Volume</label>
   </div>
@@ -97,18 +98,18 @@ function Bank(props){
  }
 function KeyPad(props){
   return(
-    <div className="w-2/3 h-full inline-block ">
-      <div className="w-4/5 h-1/4 m-2 " >
+    <div className="w-3/4 h-full inline-block mt-4 ">
+      <div className="w-full h-1/4 mb-2 " >
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="Q" />
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="W" />
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="E" />
       </div>
-      <div className="w-4/5 h-1/4 m-2 " >
+      <div className="w-full h-1/4 mb-2 " >
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="A" />
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="S" />
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="D" />
       </div>
-      <div className="w-4/5 h-1/4 m-2 " >
+      <div className="w-full h-1/4 mb-2 " >
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="Z" />
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="X" />
         <Key power={props.power} vol={props.volume} bank={props.bank} onDisplay={props.onDisplay} tone="C" />
@@ -144,14 +145,15 @@ function Key(props){
   function play(props) {
     // console.log(props.vol);
     let clip = props.bank? PianoStrings[props.tone]:HeaterStrings[props.tone];
-    props.onDisplay(clip);
+
     let audio = new Audio(`https://s3.amazonaws.com/freecodecamp/drums/${clip}.mp3`);
     audio.volume = Number(props.vol/100); // volume value should be set between 0 - 1
     audio.play();
+    props.onDisplay(clip);
   }
 
   return(
-      <input className="w-1/4 h-full m-2 p-4 inline-block rounded-full bg-yellow-200 " type="button" disabled={!props.power} value={props.tone} onClick={() => play(props)} />
+      <input className="w-1/4 h-full m-2 p-2 inline-block rounded-full bg-yellow-200 " type="button" disabled={!props.power} value={props.tone} onClick={() => play(props)} />
   )
 }
 
